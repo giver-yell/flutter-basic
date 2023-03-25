@@ -1,5 +1,9 @@
 # flutter-basic
 
+## Start
+```
+$ flutter run --device-id chrome
+```
 
 ## install flutter
 1. official refferenceでdownload  
