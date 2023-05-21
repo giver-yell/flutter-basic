@@ -1,26 +1,27 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(
+    child: MyApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+final myProvider = ChangeNotifierProvider((ref) => MyAppState());
+
+class MyApp extends ConsumerWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        ),
-        home: MyHomePage(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp(
+      title: 'Namer App',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
+      home: MyHomePage(),
     );
   }
 }
@@ -105,14 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class FvoritesPage extends StatelessWidget {
-  const FvoritesPage({
-    super.key,
-  });
+class FvoritesPage extends ConsumerWidget {
+  const FvoritesPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    var appState = ref.watch(myProvider);
 
     if (appState.favorites.isEmpty) {
       return Center(
@@ -137,10 +136,10 @@ class FvoritesPage extends StatelessWidget {
   }
 }
 
-class GeneratorPage extends StatelessWidget {
+class GeneratorPage extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    var appState = ref.watch(myProvider);
     var pair = appState.current;
 
     IconData icon;
